@@ -13,22 +13,6 @@ let _solver_last_eta = 0;
 let _solver_workers = [];        // [{worker, done, checked, feasible, top5}]
 let _solver_progress_timer = 0;  // setInterval handle
 
-// Optional python/wasm worker toggle (experimental).
-// Enable with ?solver_worker=python (or ?solver_worker=py) in the URL.
-const _SOLVER_WORKER_MODE = (() => {
-    const q = new URLSearchParams(window.location.search).get('solver_worker');
-    if (!q) return 'js';
-    const v = q.toLowerCase();
-    return (v === 'python' || v === 'py') ? 'python' : 'js';
-})();
-
-function _get_solver_worker_url() {
-    if (_SOLVER_WORKER_MODE === 'python') {
-        return '../js/solver/python_solver/worker_adapter.js?v=1';
-    }
-    return '../js/solver/solver_worker.js?v=3';
-}
-
 // Bitmask tracking which equipment slots were last filled by the solver.
 let _solver_free_mask = 0;
 
@@ -1000,7 +984,7 @@ function _run_solver_search_workers(pools, locked, snap) {
     // Spawn workers: send heavy 'init' with first partition, then 'run' for subsequent
     const actual_workers = Math.min(num_workers, partitions.length);
     for (let i = 0; i < actual_workers; i++) {
-        const w = new Worker(_get_solver_worker_url());
+        const w = new Worker('../js/solver/solver_worker.js?v=3');
         const wstate = {
             worker: w, done: true, checked: 0, feasible: 0, top5: [],
             _cur_checked: 0, _cur_feasible: 0, _cur_top5: [],

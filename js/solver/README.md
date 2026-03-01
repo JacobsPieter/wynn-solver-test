@@ -96,11 +96,6 @@ The solver uses the same push-based reactive DAG as WynnBuilder (`ComputeNode` i
 - `worker_atree_scaling()` — replaces the DOM-reading atree scaling node using serialized button/slider states.
 - `_init_running_statmap()` / `_incr_add_item()` / `_incr_remove_item()` / `_finalize_leaf_statmap()` — incremental stat accumulation functions for the DFS, avoiding full rebuilds at every leaf.
 
-**`python_solver/`** — experimental Python/WASM worker scaffolding:
-- `worker_adapter.js` loads a Pyodide runtime in the worker and forwards the existing `init/run` worker protocol to Python entry points.
-- `solver_entry.py` exposes placeholder `init_worker()` / `run_partition()` functions to be replaced by the real Python port.
-- Enable the adapter with `?solver_worker=python` (JS worker remains default).
-
 ---
 
 ### Styles
